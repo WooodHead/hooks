@@ -1,11 +1,11 @@
 import type { NextPage } from 'next'
-import { Button } from "@mantine/core"
+import Lightdarkbutton from '../components/LightDarkButton/lightdarkbutton'
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <Button>Mantine init</Button>
-    </div>
+    <>
+      <Lightdarkbutton/>
+    </>
   )
 }
 
