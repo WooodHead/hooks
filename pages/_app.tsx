@@ -5,6 +5,7 @@ import {
 	MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -18,18 +19,27 @@ function MyApp({ Component, pageProps }: AppProps) {
 	useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
 	return (
-		<ColorSchemeProvider
-			colorScheme={colorScheme}
-			toggleColorScheme={toggleColorScheme}
-		>
-			<MantineProvider
-				theme={{ colorScheme }}
-				withGlobalStyles
-				withNormalizeCSS
+		<>
+			<Head>
+				<title>Hooks</title>
+				<meta
+					name="viewport"
+					content="minimum-scale=1, initial-scale=1, width=device-width"
+				/>
+			</Head>
+			<ColorSchemeProvider
+				colorScheme={colorScheme}
+				toggleColorScheme={toggleColorScheme}
 			>
-				<Component {...pageProps} />
-			</MantineProvider>
-		</ColorSchemeProvider>
+				<MantineProvider
+					theme={{ colorScheme }}
+					withGlobalStyles
+					withNormalizeCSS
+				>
+					<Component {...pageProps} />
+				</MantineProvider>
+			</ColorSchemeProvider>
+		</>
 	);
 }
 
