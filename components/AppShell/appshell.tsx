@@ -14,8 +14,17 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Lightdarkbutton from "../LightDarkButton/lightdarkbutton";
 import hookpng from "../../public/hook.png";
+import { MDXPost } from "pages/hooks/[slug]";
+import { MDXRemote } from "next-mdx-remote";
+import Youtube from "@/components/Youtube/youtube";
 
-const Appshell = ({ posts, content }: { posts: PostMeta[]; content: string }) => {
+const Appshell = ({
+	posts,
+	content,
+}: {
+	posts: PostMeta[];
+	content: MDXPost;
+}) => {
 	const theme = useMantineTheme();
 	const [opened, setOpened] = useState(false);
 	return (
@@ -90,7 +99,7 @@ const Appshell = ({ posts, content }: { posts: PostMeta[]; content: string }) =>
 				</Header>
 			}
 		>
-			<Text>{content}</Text>
+			<MDXRemote {...content.source} components={{ Youtube, Image, Link }} />
 		</AppShell>
 	);
 };

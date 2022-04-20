@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import { sync } from "glob";
+import { log } from "console";
 
 const POSTS_PATH = path.join(process.cwd(), "posts").replace(/\\/g, "/");
 
@@ -44,16 +45,17 @@ export const getPostFromSlug = (slug: string): Post => {
 	};
 };
 
-export const getAllPosts = () => {
-	const posts = getSlugs()
+export const getAllPostsExceptIndex = () => {
+	const posts = getSlugs().filter(e => e !== "index")
 		.map((slug) => getPostFromSlug(slug))
 		.sort((post1, post2) => {
 			const postDate1 = new Date(post1.meta.date);
 			const postDate2 = new Date(post2.meta.date);
+			console.log(postDate1.getTime(), postDate2.getTime());
+			
 			if (postDate1.getTime() > postDate2.getTime()) return 1;
 			if (postDate1.getTime() < postDate2.getTime()) return -1;
 			return 0;
-		})
-		.reverse();
+		});
 	return posts;
 };

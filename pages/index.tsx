@@ -1,19 +1,34 @@
 import type { GetStaticProps } from "next";
-import { getAllPosts, PostMeta } from "lib/utils";
+import { getAllPostsExceptIndex, getPostFromSlug, PostMeta } from "lib/utils";
 import Appshell from "@/components/AppShell/appshell";
+import { serialize } from "next-mdx-remote/serialize";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeHighlight from "rehype-highlight";
+import { MDXPost } from "./hooks/[slug]";
 
-const Home = ({ posts }: { posts: PostMeta[] }) => {
+const Home = ({ post, posts }: { post: MDXPost; posts: PostMeta[] }) => {
 	return (
-		<Appshell posts={posts} content={"content"}/>
+		<Appshell posts={posts} content={post}/>
 	);
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-	const posts = getAllPosts().map((post) => post.meta);
-	console.log(posts);
 
+export const getStaticProps: GetStaticProps = async (context) => {
+	const posts = getAllPostsExceptIndex().map((post) => post.meta);
+	const { content, meta } = getPostFromSlug("index");
+	const mdxSource = await serialize(content, {
+		mdxOptions: {
+			rehypePlugins: [
+				rehypeSlug,
+				[rehypeAutolinkHeadings, { behavior: "wrap" }],
+				rehypeHighlight,
+			],
+		},
+	});
 	return {
 		props: {
+			post: { source: mdxSource, meta },
 			posts,
 		},
 	};
