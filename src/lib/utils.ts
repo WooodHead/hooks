@@ -2,9 +2,8 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import { sync } from "glob";
-import { log } from "console";
 
-const POSTS_PATH = path.join(process.cwd(), "posts").replace(/\\/g, "/");
+const POSTS_PATH = path.join(process.cwd(), "src", "posts").replace(/\\/g, "/");
 
 export const getSlugs = (): string[] => {
 	const paths = sync(`${POSTS_PATH}/*.mdx`);

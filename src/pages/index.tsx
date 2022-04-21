@@ -1,6 +1,6 @@
 import type { GetStaticProps } from "next";
-import { getAllPostsExceptIndex, getPostFromSlug, PostMeta } from "lib/utils";
-import Appshell from "@/components/AppShell/appshell";
+import { getAllPostsExceptIndex, getPostFromSlug, PostMeta } from "src/lib/utils";
+import Appshell from "src/components/AppShell/appshell";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";

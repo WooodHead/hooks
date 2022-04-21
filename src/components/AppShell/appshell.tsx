@@ -1,6 +1,7 @@
 import {
 	AppShell,
 	Burger,
+	Container,
 	Header,
 	MediaQuery,
 	Navbar,
@@ -8,15 +9,15 @@ import {
 	Text,
 	useMantineTheme,
 } from "@mantine/core";
-import { PostMeta } from "lib/utils";
+import { PostMeta } from "src/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import Lightdarkbutton from "../LightDarkButton/lightdarkbutton";
-import hookpng from "../../public/hook.png";
-import { MDXPost } from "pages/hooks/[slug]";
+import hookpng from "@/public/hook.png";
+import { MDXPost } from "src/pages/hooks/[slug]";
 import { MDXRemote } from "next-mdx-remote";
-import Youtube from "@/components/Youtube/youtube";
+import Youtube from "src/components/Youtube/youtube";
 
 const Appshell = ({
 	posts,
@@ -99,7 +100,9 @@ const Appshell = ({
 				</Header>
 			}
 		>
-			<MDXRemote {...content.source} components={{ Youtube, Image, Link }} />
+			<Container>
+				<MDXRemote {...content.source} components={{ Youtube, Image, Link }} />
+			</Container>
 		</AppShell>
 	);
 };

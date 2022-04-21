@@ -1,0 +1,32 @@
+---
+title: useToggle
+date: 2022-04-21
+---
+
+# useToggle()
+
+A simple toggle state.
+
+## Demo
+
+
+
+## The Hook
+
+```tsx
+import { useState } from "react"
+
+const useToggle = (initialValue) => {
+  const [value, setValue] = useState(initialValue)
+  
+  const toggleValue = (value) => {
+    setValue(val => typeof value === "boolean" ? value : !val)
+  }
+
+  return [value, toggleValue]
+}
+
+export default useToggle
+```
+
+## Usage

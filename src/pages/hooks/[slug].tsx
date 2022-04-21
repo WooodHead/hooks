@@ -1,14 +1,13 @@
-import { getAllPostsExceptIndex, getPostFromSlug, getSlugs, PostMeta } from "lib/utils";
+import { getAllPostsExceptIndex, getPostFromSlug, getSlugs, PostMeta } from "src/lib/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import Image from "next/image";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/atom-one-dark.css";
-import Appshell from "@/components/AppShell/appshell";
+import Appshell from "src/components/AppShell/appshell";
 
 export interface MDXPost {
 	source: MDXRemoteSerializeResult<Record<string, unknown>>;
