@@ -18,6 +18,8 @@ import hookpng from "@/public/hook.png";
 import { MDXPost } from "src/pages/hooks/[slug]";
 import { MDXRemote } from "next-mdx-remote";
 import Youtube from "src/components/Youtube/youtube";
+import { useRouter } from "next/router";
+import useStyles from "./appshell.styles";
 
 const Appshell = ({
 	posts,
@@ -26,8 +28,11 @@ const Appshell = ({
 	posts: PostMeta[];
 	content: MDXPost;
 }) => {
+	const { classes, cx } = useStyles();
+	const router = useRouter();
 	const theme = useMantineTheme();
 	const [opened, setOpened] = useState(false);
+
 	return (
 		<AppShell
 			styles={{
@@ -55,7 +60,14 @@ const Appshell = ({
 						{posts.map((post) => (
 							<div key={post.slug}>
 								<Link href={`/hooks/${post.slug}`} passHref>
-									<Text component="a">{post.title}()</Text>
+									<a
+										className={cx(classes.link, {
+											[classes.linkActive]:
+												router.asPath === `/hooks/${post.slug}`,
+										})}
+									>
+										{post.title}
+									</a>
 								</Link>
 							</div>
 						))}

@@ -8,6 +8,7 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
+	
 	const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
 		key: "mantine-color-scheme",
 		defaultValue: "dark",

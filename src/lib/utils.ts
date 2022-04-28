@@ -50,7 +50,6 @@ export const getAllPostsExceptIndex = () => {
 		.sort((post1, post2) => {
 			const postDate1 = new Date(post1.meta.date);
 			const postDate2 = new Date(post2.meta.date);
-			console.log(postDate1.getTime(), postDate2.getTime());
 			
 			if (postDate1.getTime() > postDate2.getTime()) return 1;
 			if (postDate1.getTime() < postDate2.getTime()) return -1;
