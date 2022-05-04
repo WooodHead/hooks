@@ -21,6 +21,7 @@ export interface PostMeta {
 	title: string;
 	tags: string[];
 	date: string;
+	isPublished: boolean;
 }
 
 interface Post {
@@ -39,6 +40,7 @@ export const getPostFromSlug = (slug: string): Post => {
 			title: data.title ?? slug,
 			tags: (data.tags ?? []).sort(),
 			date: (data.date ?? new Date()).toString(),
+			isPublished: data.isPublished ?? false,
 		},
 		content,
 	};
@@ -46,7 +48,7 @@ export const getPostFromSlug = (slug: string): Post => {
 
 export const getAllPostsExceptIndex = () => {
 	const posts = getSlugs().filter(e => e !== "index")
-		.map((slug) => getPostFromSlug(slug))
+		.map((slug) => getPostFromSlug(slug)).filter(post => post.meta.isPublished === true)
 		.sort((post1, post2) => {
 			const postDate1 = new Date(post1.meta.date);
 			const postDate2 = new Date(post2.meta.date);
