@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const posts = getAllPostsExceptIndex().map((post) => post.meta);
 	const { slug } = params as { slug: string };
 	const { content, meta } = getPostFromSlug(slug);
-	const mdxSource = await serialize(content, {
+	const mdxSource = await serialize(content || '', {
 		mdxOptions: {
 			rehypePlugins: [
 				rehypeSlug,
