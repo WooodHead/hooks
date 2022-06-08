@@ -13,15 +13,15 @@ import { PostMeta } from "src/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import Lightdarkbutton from "../LightDarkButton/lightdarkbutton";
+import Lightdarkbutton from "../../components/LightDarkButton/lightdarkbutton";
 import hookpng from "@/public/hook.png";
 import { MDXPost } from "src/pages/hooks/[slug]";
 import { MDXRemote } from "next-mdx-remote";
 import Youtube from "src/components/Youtube/youtube";
 import { useRouter } from "next/router";
-import useStyles from "./appshell.styles";
+import useStyles from "./baselayout.styles";
 
-const Appshell = ({
+const BaseLayout = ({
   posts,
   content,
 }: {
@@ -120,4 +120,4 @@ const Appshell = ({
   );
 };
 
-export default Appshell;
+export default BaseLayout;
