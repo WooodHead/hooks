@@ -3,35 +3,43 @@ import {
   Burger,
   Container,
   Header,
+  ScrollArea,
   MediaQuery,
   Navbar,
-  ScrollArea,
   Text,
   useMantineTheme,
-} from "@mantine/core";
-import { PostMeta } from "src/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
-import Lightdarkbutton from "../../components/LightDarkButton/lightdarkbutton";
-import hookpng from "@/public/hook.png";
-import { MDXPost } from "src/pages/hooks/[slug]";
-import { MDXRemote } from "next-mdx-remote";
-import Youtube from "src/components/Youtube/youtube";
-import { useRouter } from "next/router";
-import useStyles from "./baselayout.styles";
+} from "@mantine/core"
+import Image from "next/image"
+import Link from "next/link"
+import React, { useState } from "react"
+import Lightdarkbutton from "../../components/LightDarkButton/lightdarkbutton"
+import hookpng from "@/public/hook.png"
+import { MDXRemote } from "next-mdx-remote"
+import { useRouter } from "next/router"
+import useStyles from "./baselayout.styles"
+import dynamic from "next/dynamic"
+import { PostMeta } from "src/lib/utils"
+
+const mdxElements = {
+  Youtube: dynamic(async () => {
+    return await import("@/components/Youtube/youtube")
+  }),
+  a: dynamic(async () => {
+    return await import("@/components/CustomLink/customlink")
+  }),
+}
 
 const BaseLayout = ({
-  posts,
   content,
+  posts,
 }: {
-  posts: PostMeta[];
-  content: MDXPost;
+  content: string
+  posts: [PostMeta]
 }) => {
-  const { classes, cx } = useStyles();
-  const router = useRouter();
-  const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const { classes, cx } = useStyles()
+  const router = useRouter()
+  const theme = useMantineTheme()
+  const [opened, setOpened] = useState(false)
 
   return (
     <AppShell
@@ -114,10 +122,10 @@ const BaseLayout = ({
       }
     >
       <Container>
-        <MDXRemote {...content.source} components={{ Youtube, Image, Link }} />
+        <MDXRemote {...content} components={mdxElements} />
       </Container>
     </AppShell>
-  );
-};
+  )
+}
 
-export default BaseLayout;
+export default BaseLayout

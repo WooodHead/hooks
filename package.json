@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next-remote-watch ./_articles",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -35,6 +35,7 @@
     "@types/react-dom": "18.0.0",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",
+    "next-remote-watch": "^1.0.0",
     "typescript": "4.6.3"
   }
 }

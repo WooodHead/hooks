@@ -1,52 +1,55 @@
-import {
-  getAllPostsExceptIndex,
-  getPostFromSlug,
-  getSlugs,
-  PostMeta,
-} from "src/lib/utils";
-import { GetStaticPaths, GetStaticProps } from "next";
-import React from "react";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeHighlight from "rehype-highlight";
-import "highlight.js/styles/atom-one-dark.css";
-import BaseLayout from "src/layouts/AppShell/baselayout";
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
+import React from "react"
+import "highlight.js/styles/atom-one-dark.css"
+import { ParsedUrlQuery } from "querystring"
+import { join } from "path"
+import { readdirSync } from "fs"
+import { getParsedFileContentBySlug, renderMarkdown } from "src/lib/markdown"
+import BaseLayout from "src/layouts/AppShell/baselayout"
+import { getAllPosts } from "src/lib/utils"
 
-export interface MDXPost {
-  source: MDXRemoteSerializeResult<Record<string, unknown>>;
-  meta: PostMeta;
+const POSTS_PATH = join(process.cwd(), process.env.articleMarkdownPath ?? "_articles")
+
+export interface ArticleProps extends ParsedUrlQuery {
+  slug: string
 }
 
-const Hook = ({ post, posts }: { post: MDXPost; posts: PostMeta[] }) => {
-  return <BaseLayout posts={posts} content={post} />;
-};
+const Hook = ({ frontMatter, html, posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  return <BaseLayout content={html} posts={posts} />
+}
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getSlugs().map((slug) => ({ params: { slug } }));
-  return { paths, fallback: false };
-};
+export const getStaticProps = async ({
+  params,
+}: {
+  params: ArticleProps
+}) => {
+  // 1. parse the content of our md file and separate it into frontmatter and content
+  const articleMarkdownContent = getParsedFileContentBySlug(
+    params.slug,
+    POSTS_PATH
+  )
+  // 2. convert markdown content => HTML
+  const renderHTML = await renderMarkdown(articleMarkdownContent.content)
+  // 3. read frontmatter of all posts
+  const posts = getAllPosts().map((post) => post.meta)
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const posts = getAllPostsExceptIndex().map((post) => post.meta);
-  const { slug } = params as { slug: string };
-  const { content, meta } = getPostFromSlug(slug);
-  const mdxSource = await serialize(content || "", {
-    mdxOptions: {
-      rehypePlugins: [
-        rehypeSlug,
-        [rehypeAutolinkHeadings, { behavior: "wrap" }],
-        rehypeHighlight,
-      ],
-    },
-  });
   return {
     props: {
-      post: { source: mdxSource, meta },
+      frontMatter: articleMarkdownContent.frontMatter,
+      html: renderHTML,
       posts,
     },
-  };
-};
+  }
+}
 
-export default Hook;
+export const getStaticPaths: GetStaticPaths<ArticleProps> = async () => {
+  const paths = readdirSync(POSTS_PATH)
+    .map((path) => path.replace(/\.mdx?$/, ""))
+    .map((slug) => ({ params: { slug } }))
+  return {
+    paths,
+    fallback: false,
+  }
+}
+
+export default Hook
