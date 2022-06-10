@@ -2,6 +2,11 @@ import { readFileSync } from "fs"
 import matter from "gray-matter"
 import { serialize } from "next-mdx-remote/serialize"
 import { join } from "path"
+import rehypeHighlight from "rehype-highlight"
+import "highlight.js/styles/atom-one-dark.css";
+import remarkGfm from 'remark-gfm'
+
+
 
 export const getParsedFileContentBySlug = (
   fileName: string,
@@ -18,7 +23,16 @@ export const getParsedFileContentBySlug = (
 }
 
 export const renderMarkdown = (markdownContent: string) => {
-  return serialize(markdownContent || '')
+  return serialize(markdownContent || '', {
+    mdxOptions: {
+      remarkPlugins: [
+        remarkGfm
+      ],
+      rehypePlugins: [
+        rehypeHighlight
+      ]
+    }
+  })
 }
 
 

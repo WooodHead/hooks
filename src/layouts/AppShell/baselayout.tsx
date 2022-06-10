@@ -8,38 +8,50 @@ import {
   Navbar,
   Text,
   useMantineTheme,
+  Divider,
 } from "@mantine/core"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
+import React, { ReactNode, useState } from "react"
 import Lightdarkbutton from "../../components/LightDarkButton/lightdarkbutton"
 import hookpng from "@/public/hook.png"
-import { MDXRemote } from "next-mdx-remote"
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 import { useRouter } from "next/router"
 import useStyles from "./baselayout.styles"
 import dynamic from "next/dynamic"
 import { PostMeta } from "src/lib/utils"
+import CustomLink from "@/components/CustomLink/customlink"
 
-const mdxElements = {
-  Youtube: dynamic(async () => {
-    return await import("@/components/Youtube/youtube")
-  }),
-  a: dynamic(async () => {
-    return await import("@/components/CustomLink/customlink")
-  }),
+const Hr = () => {
+  return <Divider my="sm" variant="dashed" />
+}
+
+const defaultComponents = {
+  a: CustomLink,
+  hr: Hr,
+
+}
+
+const heavyComponents = {
+  Youtube: dynamic(() => import("@/components/Youtube/youtube")),
 }
 
 const BaseLayout = ({
   content,
   posts,
 }: {
-  content: string
+  content: MDXRemoteSerializeResult
   posts: [PostMeta]
 }) => {
   const { classes, cx } = useStyles()
   const router = useRouter()
   const theme = useMantineTheme()
   const [opened, setOpened] = useState(false)
+
+  const components = {
+    ...defaultComponents,
+    ...heavyComponents,
+  }
 
   return (
     <AppShell
@@ -122,7 +134,7 @@ const BaseLayout = ({
       }
     >
       <Container>
-        <MDXRemote {...content} components={mdxElements} />
+        <MDXRemote {...content} components={components} />
       </Container>
     </AppShell>
   )

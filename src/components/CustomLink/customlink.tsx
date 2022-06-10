@@ -1,14 +1,10 @@
-import Link from "next/link"
-import React from "react"
+import Link, { LinkProps } from "next/link"
+import { PropsWithChildren } from "react"
 
-export interface CustomLinkProps {
-  href: string
-}
-
-const CustomLink = ({ href, ...otherProps }: CustomLinkProps) => {
+const CustomLink = ({ href, children }: PropsWithChildren<LinkProps>) => {
   return (
-    <Link href={href}>
-      <a {...otherProps} />
+    <Link href={href} passHref>
+        <a>{children}</a>
     </Link>
   )
 }
