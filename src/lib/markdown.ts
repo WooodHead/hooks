@@ -29,7 +29,6 @@ export const renderMarkdown = (markdownContent: string) => {
         remarkGfm
       ],
       rehypePlugins: [
-        rehypeHighlight
       ]
     }
   })

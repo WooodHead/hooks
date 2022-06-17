@@ -35,7 +35,7 @@ export const getStaticProps = async ({
 
   return {
     props: {
-      frontMatter: articleMarkdownContent.frontMatter,
+      // frontMatter: articleMarkdownContent.frontMatter,
       html: renderHTML,
       posts,
     },

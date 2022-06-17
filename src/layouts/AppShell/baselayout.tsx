@@ -9,10 +9,11 @@ import {
   Text,
   useMantineTheme,
   Divider,
+  Title,
 } from "@mantine/core"
 import Image from "next/image"
 import Link from "next/link"
-import React, { ReactNode, useState } from "react"
+import React, { useState } from "react"
 import Lightdarkbutton from "../../components/LightDarkButton/lightdarkbutton"
 import hookpng from "@/public/hook.png"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
@@ -21,15 +22,21 @@ import useStyles from "./baselayout.styles"
 import dynamic from "next/dynamic"
 import { PostMeta } from "src/lib/utils"
 import CustomLink from "@/components/CustomLink/customlink"
+import CodeHighlight from "@/components/CodeHighlight/codehighlight"
 
 const Hr = () => {
   return <Divider my="sm" variant="dashed" />
 }
 
+const H1 = ({ children }: { children: React.ReactElement }) => {
+  return <Title order={1}>{children}</Title>
+}
+
 const defaultComponents = {
   a: CustomLink,
   hr: Hr,
-
+  h1: H1,
+  pre: CodeHighlight,
 }
 
 const heavyComponents = {
@@ -134,7 +141,13 @@ const BaseLayout = ({
       }
     >
       <Container>
-        <MDXRemote {...content} components={components} />
+        <MDXRemote
+          compiledSource={content.compiledSource}
+          frontmatter={content.frontmatter}
+          scope={content.scope}
+          components={components as any}
+          lazy={false}
+        />
       </Container>
     </AppShell>
   )
